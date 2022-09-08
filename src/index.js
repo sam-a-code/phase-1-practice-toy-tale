@@ -13,3 +13,82 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+
+// fetch('http://localhost:3000/toys')
+//   .then((res) => res.json)
+//   .then((data) => renderToys(data))
+
+//   const currentToys = document.getElementById("#toy-collection")
+  
+
+//   function renderToys(toy){
+//     currentToys.forEach((toy) => {
+//       newToy = document.createElement("div")
+//       newToy.className = "card"
+//       currentToys.appendChild(toy)
+//     })
+//   }
+//   console.log(currentToys)
+//   console.log(getToys())
+
+
+fetch("http://localhost:3000/toys")
+  .then((res) => res.json())
+  .then(data => data.forEach((toy) => {
+    renderToys(toy)
+  }))
+
+  function renderToys(toy) {
+    const card = document.createElement("div")
+    const h2 = document.createElement("h2")
+    h2.textContent = toy.name
+
+    const img = document.createElement("img")
+    img.src = toy.image
+    img.className = "toy-avatar"
+
+    const p = document.createElement("p")
+    p.textContent = toy.likes
+
+    const button = document.createElement("button")
+    button.textContent = "like"
+    button.className = "like-btn"
+    button.id = toy.id
+
+    button.addEventListener("click", ()=> {
+      p.textContent = toy.likes +=1
+    })
+
+    card.append(h2, img, p, button)
+
+    const toyCollection = document.querySelector('#toy-collection')
+    toyCollection.append(card)
+  }
+
+  function handleForm(){
+    const form = document.querySelector(".add-toy-form")
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const newName = e.target["name"].value
+      const newImage = e.target["image"].value
+      const newToy = {
+        name: newName,
+        image: newImage,
+        likes: 0
+      }
+      renderToys(newToy)
+    })
+  }
+
+  // fetch("http://localhost:3000/toys", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application-json",
+  //     },
+  //     body: JSON.stringify(newToy),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => renderToys(data));
+
+  handleForm()
